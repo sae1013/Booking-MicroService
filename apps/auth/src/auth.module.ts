@@ -7,6 +7,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
+import { LocalStrategy } from './strategy/local.strategy';
 @Module({
   imports: [
     UsersModule,
@@ -31,6 +32,6 @@ import * as Joi from 'joi';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, LocalStrategy],
 })
 export class AuthModule {}
