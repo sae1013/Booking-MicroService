@@ -11,10 +11,6 @@ export class CreateReservationDto {
 
   @IsString()
   @IsNotEmpty()
-  userId: string;
-
-  @IsString()
-  @IsNotEmpty()
   placeId: string;
 
   @IsString()
