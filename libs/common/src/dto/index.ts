@@ -1,3 +1,3 @@
 export * from './user.dto';
-export * from './card.dto';
-export * from './createCharge.dto';
+export * from './payInfo.dto';
+export * from './validatePayInfo.dto';

@@ -1,30 +1,30 @@
-import { Injectable } from '@nestjs/common';
-import { Stripe } from 'stripe';
+import { Body, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { createChargeDto } from '@app/common';
-
+import { PAYMENT_URL } from '../constants';
+import { HttpService } from '@nestjs/axios';
+import { map } from 'rxjs';
 @Injectable()
 export class PaymentsService {
-  private readonly stripe = new Stripe(
-    this.configService.get('STRIPE_SECRET_KEY'),
-    { apiVersion: '2024-04-10' },
-  );
+  constructor(
+    private readonly configService: ConfigService,
+    private httpService: HttpService,
+  ) {}
+  async completePayments(@Body() completePaymentsDto: any) {
+    const { paymentId, amount } = completePaymentsDto;
 
-  constructor(private readonly configService: ConfigService) {}
+    const paymentResponse = await this.httpService
+      .get(`${PAYMENT_URL.PORTONE}/payments/${encodeURIComponent(paymentId)}`, {
+        headers: {
+          Authorization: `PortOne ${this.configService.get('PORTONE_API_SECRET')}`,
+        },
+      })
+      .pipe(
+        map((response) => {
+          console.log('응답', response);
+        }),
+      );
+    // validate payment here
 
-  async createCharge({ card, amount }: createChargeDto) {
-    const paymentMethod = await this.stripe.paymentMethods.create({
-      type: 'card',
-      card,
-    });
-
-    const paymentIntent = await this.stripe.paymentIntents.create({
-      payment_method: paymentMethod.id,
-      amount: amount * 100,
-      confirm: true,
-      payment_method_types: ['card'],
-      currency: 'usd',
-    });
-    return paymentIntent;
+    console.log('최종응답', paymentResponse);
   }
 }

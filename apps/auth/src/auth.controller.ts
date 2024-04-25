@@ -6,7 +6,7 @@ import { UserDocument } from './users/models/user.schema';
 import { Response } from 'express';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-@Controller()
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

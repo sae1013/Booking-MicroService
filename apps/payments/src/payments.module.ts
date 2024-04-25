@@ -4,9 +4,11 @@ import { PaymentsService } from './payments.service';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { LoggerModule } from '@app/common';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
+    HttpModule,
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
