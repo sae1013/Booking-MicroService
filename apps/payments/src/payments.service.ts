@@ -3,14 +3,18 @@ import { ConfigService } from '@nestjs/config';
 import { PAYMENT_URL } from '../constants';
 import { HttpService } from '@nestjs/axios';
 import { map } from 'rxjs';
+import { CompletePaymentDto } from '@app/common';
 @Injectable()
 export class PaymentsService {
   constructor(
     private readonly configService: ConfigService,
     private httpService: HttpService,
   ) {}
-  async completePayments(@Body() completePaymentsDto: any) {
-    const { paymentId, amount } = completePaymentsDto;
+  async completePayments(@Body() completePaymentDto: CompletePaymentDto) {
+    const {
+      payInfo: { paymentId },
+      amount,
+    } = completePaymentDto;
 
     const paymentResponse = await this.httpService
       .get(`${PAYMENT_URL.PORTONE}/payments/${encodeURIComponent(paymentId)}`, {

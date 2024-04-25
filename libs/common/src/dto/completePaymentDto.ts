@@ -7,7 +7,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-export class validatePayInfoDto {
+export class CompletePaymentDto {
   @ValidateNested()
   @IsDefined()
   @IsNotEmptyObject()
