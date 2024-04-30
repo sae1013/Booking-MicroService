@@ -4,6 +4,7 @@ import { PAYMENT_URL } from '../constants';
 import { HttpService } from '@nestjs/axios';
 import { map, tap, firstValueFrom } from 'rxjs';
 import { CompletePaymentDto } from '@app/common';
+
 @Injectable()
 export class PaymentsService {
   constructor(
@@ -35,16 +36,20 @@ export class PaymentsService {
           }),
         ),
     );
-    // validate payment here
+    //NOTE: validate payment here
     const { success, errorMessage } = this.validatePayments(
       paymentResponse,
       amount,
     );
     if (success) {
+      console.log(paymentResponse);
+
       return {
         orderName: paymentResponse.orderName,
         amount: paymentResponse.amount,
         paidAt: paymentResponse.paidAt,
+        invoiceId: paymentResponse.id,
+        receiptUrl: paymentResponse.receiptUrl,
       };
     } else {
       throw new HttpException(errorMessage, HttpStatus.BAD_REQUEST);

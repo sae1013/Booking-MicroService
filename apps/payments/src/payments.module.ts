@@ -14,6 +14,7 @@ import { HttpModule } from '@nestjs/axios';
       validationSchema: Joi.object({
         MONGODB_URI: Joi.string().required(),
         TCP_PORT: Joi.string().required(),
+        PORTONE_API_SECRET: Joi.string().required(),
       }),
     }),
     LoggerModule,

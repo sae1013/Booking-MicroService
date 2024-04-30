@@ -9,7 +9,11 @@ import { LoggerModule } from '@app/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { ClientsModule } from '@nestjs/microservices';
-import { AUTH_SERVICE, PAYMENTS_SERVICE } from '@app/common/constants/services';
+import {
+  AUTH_SERVICE,
+  NOTIFICATIONS_SERVICE,
+  PAYMENTS_SERVICE,
+} from '@app/common/constants/services';
 import { Transport } from '@nestjs/microservices';
 @Module({
   imports: [
@@ -29,6 +33,8 @@ import { Transport } from '@nestjs/microservices';
         AUTH_HOST: Joi.string().required(),
         PAYMENTS_PORT: Joi.number().required(),
         PAYMENTS_HOST: Joi.string().required(),
+        NOTIFICATIONS_PORT: Joi.number().required(),
+        NOTIFICATIONS_HOST: Joi.string().required(),
       }),
     }),
     LoggerModule,
@@ -54,6 +60,19 @@ import { Transport } from '@nestjs/microservices';
               transport: Transport.TCP,
               host: configService.get('PAYMENTS_HOST'),
               port: configService.get('PAYMENTS_PORT'),
+            },
+          };
+        },
+        inject: [ConfigService],
+      },
+      {
+        name: NOTIFICATIONS_SERVICE,
+        useFactory: (configService: ConfigService) => {
+          return {
+            options: {
+              transport: Transport.TCP,
+              host: configService.get('NOTIFICATIONS_HOST'),
+              port: configService.get('NOTIFICATIONS_PORT'),
             },
           };
         },
